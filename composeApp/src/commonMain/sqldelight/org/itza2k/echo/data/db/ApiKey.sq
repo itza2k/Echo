@@ -1,0 +1,27 @@
+CREATE TABLE ApiKey (
+    id TEXT NOT NULL PRIMARY KEY DEFAULT 'default',
+    api_key TEXT NOT NULL,
+    created_at TEXT NOT NULL -- ISO-8601 timestamp
+);
+
+-- Get the API key
+getApiKey:
+SELECT api_key
+FROM ApiKey
+WHERE id = 'default';
+
+-- Insert or replace the API key
+saveApiKey:
+INSERT OR REPLACE INTO ApiKey(id, api_key, created_at)
+VALUES ('default', ?, ?);
+
+-- Delete the API key
+deleteApiKey:
+DELETE FROM ApiKey
+WHERE id = 'default';
+
+-- Check if an API key exists
+hasApiKey:
+SELECT COUNT(*) > 0
+FROM ApiKey
+WHERE id = 'default';

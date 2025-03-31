@@ -1,0 +1,60 @@
+CREATE TABLE MoodEnergyEntry (
+    id TEXT NOT NULL PRIMARY KEY,
+    mood_level TEXT NOT NULL, -- VERY_BAD, BAD, NEUTRAL, GOOD, VERY_GOOD
+    energy_level TEXT NOT NULL, -- VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH
+    note TEXT NOT NULL,
+    date TEXT NOT NULL, -- ISO-8601 date
+    time TEXT NOT NULL, -- ISO-8601 time
+    created_at TEXT NOT NULL -- ISO-8601 timestamp
+);
+
+-- Get all mood/energy entries
+getAllMoodEnergyEntries:
+SELECT *
+FROM MoodEnergyEntry
+ORDER BY created_at DESC;
+
+-- Get a specific mood/energy entry by ID
+getMoodEnergyEntryById:
+SELECT *
+FROM MoodEnergyEntry
+WHERE id = ?;
+
+-- Get mood/energy entries for a specific date
+getMoodEnergyEntriesByDate:
+SELECT *
+FROM MoodEnergyEntry
+WHERE date = ?
+ORDER BY time DESC;
+
+-- Get mood/energy entries for the current day
+getTodayMoodEnergyEntries:
+SELECT *
+FROM MoodEnergyEntry
+WHERE date = ?
+ORDER BY time DESC;
+
+-- Get the most recent mood/energy entry
+getMostRecentMoodEnergyEntry:
+SELECT *
+FROM MoodEnergyEntry
+ORDER BY created_at DESC
+LIMIT 1;
+
+-- Insert a new mood/energy entry
+insertMoodEnergyEntry:
+INSERT INTO MoodEnergyEntry(id, mood_level, energy_level, note, date, time, created_at)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+-- Update an existing mood/energy entry
+updateMoodEnergyEntry:
+UPDATE MoodEnergyEntry
+SET mood_level = ?,
+    energy_level = ?,
+    note = ?
+WHERE id = ?;
+
+-- Delete a mood/energy entry
+deleteMoodEnergyEntry:
+DELETE FROM MoodEnergyEntry
+WHERE id = ?;

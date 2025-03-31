@@ -1,0 +1,71 @@
+CREATE TABLE Goal (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    start_date TEXT NOT NULL, -- ISO-8601 format (YYYY-MM-DD)
+    end_date TEXT, -- ISO-8601 format (YYYY-MM-DD), can be NULL
+    is_completed INTEGER AS Boolean NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL, -- ISO-8601 timestamp
+    updated_at TEXT NOT NULL -- ISO-8601 timestamp
+);
+
+-- Get all goals
+getAllGoals:
+SELECT *
+FROM Goal
+ORDER BY start_date ASC;
+
+-- Get a specific goal by ID
+getGoalById:
+SELECT *
+FROM Goal
+WHERE id = ?;
+
+-- Get all incomplete goals
+getIncompleteGoals:
+SELECT *
+FROM Goal
+WHERE is_completed = 0
+ORDER BY start_date ASC;
+
+-- Get all completed goals
+getCompletedGoals:
+SELECT *
+FROM Goal
+WHERE is_completed = 1
+ORDER BY start_date DESC;
+
+-- Insert a new goal
+insertGoal:
+INSERT INTO Goal(id, title, description, start_date, end_date, is_completed, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Update an existing goal
+updateGoal:
+UPDATE Goal
+SET title = ?,
+    description = ?,
+    start_date = ?,
+    end_date = ?,
+    is_completed = ?,
+    updated_at = ?
+WHERE id = ?;
+
+-- Delete a goal
+deleteGoal:
+DELETE FROM Goal
+WHERE id = ?;
+
+-- Mark a goal as completed
+markGoalCompleted:
+UPDATE Goal
+SET is_completed = 1,
+    updated_at = ?
+WHERE id = ?;
+
+-- Mark a goal as incomplete
+markGoalIncomplete:
+UPDATE Goal
+SET is_completed = 0,
+    updated_at = ?
+WHERE id = ?;

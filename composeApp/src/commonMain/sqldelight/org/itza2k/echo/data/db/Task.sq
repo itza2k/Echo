@@ -1,0 +1,78 @@
+CREATE TABLE Task (
+    id TEXT NOT NULL PRIMARY KEY,
+    goal_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    is_completed INTEGER AS Boolean NOT NULL DEFAULT 0,
+    priority TEXT NOT NULL, -- LOW, MEDIUM, HIGH
+    created_at TEXT NOT NULL, -- ISO-8601 timestamp
+    updated_at TEXT NOT NULL, -- ISO-8601 timestamp
+    FOREIGN KEY (goal_id) REFERENCES Goal(id)
+);
+
+-- Get all tasks
+getAllTasks:
+SELECT *
+FROM Task
+ORDER BY created_at DESC;
+
+-- Get a specific task by ID
+getTaskById:
+SELECT *
+FROM Task
+WHERE id = ?;
+
+-- Get all tasks for a specific goal
+getTasksByGoalId:
+SELECT *
+FROM Task
+WHERE goal_id = ?
+ORDER BY created_at DESC;
+
+-- Get all incomplete tasks
+getIncompleteTasks:
+SELECT *
+FROM Task
+WHERE is_completed = 0
+ORDER BY priority DESC, created_at DESC;
+
+-- Get all completed tasks
+getCompletedTasks:
+SELECT *
+FROM Task
+WHERE is_completed = 1
+ORDER BY updated_at DESC;
+
+-- Insert a new task
+insertTask:
+INSERT INTO Task(id, goal_id, title, description, is_completed, priority, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Update an existing task
+updateTask:
+UPDATE Task
+SET title = ?,
+    description = ?,
+    is_completed = ?,
+    priority = ?,
+    updated_at = ?
+WHERE id = ?;
+
+-- Delete a task
+deleteTask:
+DELETE FROM Task
+WHERE id = ?;
+
+-- Mark a task as completed
+markTaskCompleted:
+UPDATE Task
+SET is_completed = 1,
+    updated_at = ?
+WHERE id = ?;
+
+-- Mark a task as incomplete
+markTaskIncomplete:
+UPDATE Task
+SET is_completed = 0,
+    updated_at = ?
+WHERE id = ?;
